@@ -64,8 +64,8 @@ h3 {
   transform: translate(-50%, -50%);
   font-size: 8rem;
   font-weight: bold;
-  color: #333;
-  background: rgba(255, 255, 255, 0.8);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
   padding: 30px 60px;
   border-radius: 30px;
   display: none;
