@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Codename Pictures Competition</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="info-panel">
+  <div class="team" id="team1">
+    <h2>BLUE TEAM</h2>
+    <div class="info-round">
+      <span class="game-timer" id="timer1">05:00</span> |
+      <span id="agent1">AGENT REVEALED: 0</span> |
+      <span id="pp1">PP: 0</span>
+    </div>
+  </div>
+  
+  <div id="team-turn">
+    <h3>BLUE TEAM'S TURN</h3>
+    <div class="attempt">
+      <span id="attempts">ATTEMPT REMAINING = 0</span> 
+    </div>
+  </div>
+  
+  <div class="team" id="team2">
+    <h2>RED TEAM</h2>
+    <div class="info-round">
+      <span class="game-timer" id="timer2">05:00</span> |
+      <span id="agent2">AGENT REVEALED: 0</span> |
+      <span id="pp2">PP: 0</span>
+    </div>
+  </div>
+</div>
+
+<div>
+  <img class="watermark" src="image/smanti.png"/>
+  <img class="watermark" src="image/ec.png"/>
+  <img class="watermark" src="image/adiwiyata.png"/>
+</div>
+
+<div id="game-board" class="grid-container"></div>
+
+<div id="countdown"></div>
+
+<div class="image-container" style="display: none">
+  <img id="cardImage" src="image/images/1.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/2.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/3.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/4.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/5.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/6.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/7.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/8.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/9.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/10.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/11.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/12.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/13.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/14.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/15.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/16.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/17.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/18.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/19.jpg" alt="Card Image"/>
+  <img id="cardImage" src="image/images/20.jpg" alt="Card Image"/>
+</div>
+
+<div class="image-container" style="display: none">
+  <img id="cardImage" src="image/blueAgents/1.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/2.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/3.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/4.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/5.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/6.png" alt="Card Image"/>
+  <img id="cardImage" src="image/blueAgents/7.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/1.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/2.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/3.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/4.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/5.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/6.png" alt="Card Image"/>
+  <img id="cardImage" src="image/redAgents/7.png" alt="Card Image"/>
+  <img id="cardImage" src="image/doubleAgents/1.png" alt="Card Image"/>
+  <img id="cardImage" src="image/doubleAgents/2.png" alt="Card Image"/>
+  <img id="cardImage" src="image/assassin/1.png" alt="Card Image"/>
+  <img id="cardImage" src="image/innocentBystanders/1.png" alt="Card Image"/>
+  <img id="cardImage" src="image/innocentBystanders/2.png" alt="Card Image"/>
+  <img id="cardImage" src="image/innocentBystanders/3.png" alt="Card Image"/>
+  <img id="cardImage" src="image/innocentBystanders/4.png" alt="Card Image"/>
+  <img id="cardImage" src="image/backs/blueAgents.png" alt="Card Image"/>
+  <img id="cardImage" src="image/backs/redAgents.png" alt="Card Image"/>
+  <img id="cardImage" src="image/backs/innocentBystanders.png" alt="Card Image"/>
+</div>
+
+<div id="popup" class="popup"></div>   
+
+<audio id="sound-countdown1" src="sounds/countdown1.mp3" preload="auto"></audio>
+<audio id="sound-countdown2" src="sounds/countdown2.mp3" preload="auto"></audio>
+<audio id="sound-autoReveal" src="sounds/autoReveal.mp3" preload="auto"></audio>
+<audio id="sound-backsound" src="sounds/bgmusic.mp3" preload="auto"></audio>
+<audio id="sound-shuffle" src="sounds/shuffle.mp3" preload="auto"></audio>
+<audio id="sound-winner" src="sounds/winner.mp3" preload="auto"></audio>
+
+<audio id="sound-a" src="sounds/voices/a.mp3" preload="auto"></audio>
+<audio id="sound-b" src="sounds/voices/b.mp3" preload="auto"></audio>
+<audio id="sound-c" src="sounds/voices/c.mp3" preload="auto"></audio>
+<audio id="sound-d" src="sounds/voices/d.mp3" preload="auto"></audio>
+<audio id="sound-e" src="sounds/voices/e.mp3" preload="auto"></audio>
+<audio id="sound-1" src="sounds/voices/1.mp3" preload="auto"></audio>
+<audio id="sound-2" src="sounds/voices/2.mp3" preload="auto"></audio>
+<audio id="sound-3" src="sounds/voices/3.mp3" preload="auto"></audio>
+<audio id="sound-4" src="sounds/voices/4.mp3" preload="auto"></audio>
+<audio id="sound-5" src="sounds/voices/5.mp3" preload="auto"></audio>
+<audio id="sound-blue" src="sounds/voices/blue.mp3" preload="auto"></audio>
+<audio id="sound-red" src="sounds/voices/red.mp3" preload="auto"></audio>
+
+<audio id="sound-blueAgents" src="sounds/voices/blueAgent.mp3" preload="auto"></audio>
+<audio id="sound-redAgents" src="sounds/voices/redAgent.mp3" preload="auto"></audio>
+<audio id="sound-assassin" src="sounds/voices/assassin.mp3" preload="auto"></audio>
+<audio id="sound-doubleAgents" src="sounds/voices/doubleAgent.mp3" preload="auto"></audio>
+<audio id="sound-innocentBystanders" src="sounds/voices/innocentBystander.mp3" preload="auto"></audio>
+
+<audio id="sound-blueTeam" src="sounds/voices/blueTeam.mp3" preload="auto"></audio>
+<audio id="sound-redTeam" src="sounds/voices/redTeam.mp3" preload="auto"></audio>
+<audio id="sound-attempt" src="sounds/voices/attempt.mp3" preload="auto"></audio>
+<audio id="sound-attempts" src="sounds/voices/attempts.mp3" preload="auto"></audio>
+<audio id="sound-winnerBlue" src="sounds/voices/winnerBlue.mp3" preload="auto"></audio>
+<audio id="sound-winnerRed" src="sounds/voices/winnerRed.mp3" preload="auto"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>

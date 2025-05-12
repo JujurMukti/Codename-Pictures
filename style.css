@@ -1,0 +1,218 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f5f5;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#info-panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #253cae;
+  color: white;
+  padding: 10px;
+}
+
+h2 {
+  margin-bottom: 5%;
+}
+
+h3 {
+  margin: 0;
+  padding: 0.5rem 0;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.attempt {
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.team {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.timer {
+  text-align: center;
+}
+
+.info-round {
+  font-size: 1rem;
+  margin-top: 5px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+#countdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: bold;
+  color: #333;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 30px 60px;
+  border-radius: 30px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 100;
+  justify-content: center;
+  text-align: center;
+}
+
+.watermark {
+  aspect-ratio: 1 / 1;
+  width: 50px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+#game-board {
+  width: 40%;
+  height: 40%;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
+  justify-content: center;
+  max-width: 90%;
+  margin: 5px auto;
+}
+
+.card {
+  aspect-ratio: 1 / 1;
+  width: 80%;
+  border: 5px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  background-color: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+.background {
+  z-index: 0;
+}
+
+.foreground {
+  z-index: 1;
+}
+
+.card.doubleAgents {
+  border-color: #253cae #ae2525 #ae2525 #253cae;
+}
+
+.card.blueAgents {
+  border-color: #253cae;
+}
+
+.card.redAgents {
+  border-color: #ae2525;
+}
+
+.card.assassin {
+  border-color: #000;
+}
+
+.card.innocentBystanders {
+  border-color: #f6c883;
+}
+
+.card.selected {
+  transform: scale(1.05);
+  transition: transform 0.2s;
+}
+
+.card.auto-reveal {
+  transform: scale(1.10);
+  transition: transform 0.5s;
+  border-color: #25ae2e;
+}
+
+.card.winner {
+  border-color: #25ae2e;
+}
+
+#popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(30, 136, 229, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#popup .popup-box {
+  background: white;
+  color: #333;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 2rem 3rem;
+  font-size: 6vmin;
+  font-weight: bold;
+  text-align: center;
+  max-width: 85%;
+  transition: all 0.3s ease;
+}
+
+.shake-flash {
+  animation: shake 0.4s ease, flashRed 0.4s ease;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  20% { transform: translate(-1px, -2px) rotate(-1deg); }
+  40% { transform: translate(-3px, 0px) rotate(1deg); }
+  60% { transform: translate(3px, 2px) rotate(0deg); }
+  80% { transform: translate(1px, -1px) rotate(1deg); }
+  100% { transform: translate(-1px, 2px) rotate(-1deg); }
+}
+
+@keyframes flashRed {
+  0% { color: red; }
+  50% { color: white; }
+  100% { color: red; }
+}
+
+
