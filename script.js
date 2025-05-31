@@ -34,6 +34,15 @@ const soundShuffle = document.getElementById("sound-shuffle");
 const soundWinner = document.getElementById("sound-winner");
 const backsound = document.getElementById("sound-backsound");
 
+let statBlueAgents = { 1: 0, 2: 0 };
+let statRedAgents = { 1: 0, 2: 0 };
+let statDoubleAgent = { 1: 0, 2: 0 };
+let statInnocentBystanders = { 1: 0, 2: 0 };
+let statAssassin = { 1: 0, 2: 0 };
+let statAutoReveal = { 1: 0, 2: 0 };
+let statTimeUsed = { 1: 0, 2: 0 };
+let statWinner = null;
+
 let attempts = document.getElementById("attempts");
 let currentRole = null;
 let agents = { 1: 0, 2: 0 };
@@ -58,8 +67,9 @@ let cards;
 
 function updateTimers(team) {
   if (team <= 0) {
-    if (currentTeam === 1) gameTimer1.textContent = `00:00`;
-    else gameTimer2.textContent = `00:00`;
+    if (currentTeam === 1) gameTimer1.textContent = `00:00`, gameTimes[1] = 0;
+    else gameTimer2.textContent = `00:00`, gameTimes[2] = 0;
+    clearInterval(countdownInterval);
     playSound(soundCountdown2);
     countdownElement.style.display = 'block';
     countdownElement.style.opacity = '1';
@@ -143,6 +153,7 @@ async function playSoundCountdown(times) {
   soundCountdown2.volume = 0.5;
   if (times === 'GAME OVER!') times = 0;
   for (i = times; i >= 0; i--) {
+    if (endgame) return;
     if (isCountingDown2) {
      isCountingDown2 = false;
      return;
@@ -306,6 +317,7 @@ function revealCard(card) {
       penaltyPoint2.innerText = `PP: ${pp[2]}`;
       blueTeamTurn();
     }
+    statBlueAgents[currentTeam]++;
   } else if (role === "redAgents") {
     agents[2]++;
     agent2.textContent = `AGENT REVEALED: ${agents[2]}`;
@@ -330,6 +342,7 @@ function revealCard(card) {
       penaltyPoint1.innerText = `PP: ${pp[1]}`;
       redTeamTurn();
     }
+    statRedAgents[currentTeam]++;
   } else if (role === "doubleAgents") {
     currentTeam === 1 ? agents[1]++ : agents[2]++;
     if (currentTeam === 1) agent1.textContent = `AGENT REVEALED: ${agents[1]}`;
@@ -349,6 +362,7 @@ function revealCard(card) {
       if (currentTeam === 1) redTeamTurn();
       else blueTeamTurn();
     }
+    statDoubleAgent[currentTeam]++;
   } else if (role === "innocentBystanders") {
     if (currentTeam === 1) {
       pp[1] += attempt + 1;
@@ -360,6 +374,7 @@ function revealCard(card) {
       penaltyPoint2.innerText = `PP: ${pp[2]}`;
       blueTeamTurn();
     }
+    statInnocentBystanders[currentTeam]++;
   } else {
       if (currentTeam === 1) {
       pp[1] += attempt;
@@ -374,6 +389,7 @@ function revealCard(card) {
       updateTimers(gameTimes[2]);
       if (gameTimes[2] - 2 > 0) blueTeamTurn();
     }
+    statAssassin[currentTeam]++;
   }
 
   if (pp[1] >= 5) {
@@ -408,7 +424,8 @@ function autoRevealAgent(team) {
       } else {
         agents[2]++;
         agent2.textContent = `AGENT REVEALED: ${agents[2]}`;
-      }  
+      }
+      statAutoReveal[team]++;
       playSound(soundAutoReveal);
       if (agents[1] === 7 || agents[2] === 7) {
       showPopup(1);
@@ -484,6 +501,15 @@ function showPopup(condition) {
     agents[1] === 7 || gameTimes[2] <= 0 ? playSound(voices["winnerBlue"]) : playSound(voices["winnerRed"]);
     setTimeout(() => {
       popup.classList.remove('show');
+      statWinner = agents[1] === 7 || gameTimes[2] <= 0;
+      const assassinTime1 = statAssassin[1] === 1 ? 180 : 0;
+      const assassinTime2 = statAssassin[2] === 1 ? 180 : 0;
+      statTimeUsed[1] = 300 - gameTimes[1] - assassinTime1;
+      statTimeUsed[2] = 300 - gameTimes[2] - assassinTime2;
+      const stats = generateStats();
+      setTimeout(() => {
+        showEndGameSummary(stats);
+      }, 1000);
     }, 3000);
   }, 4000);
   gameActive = false;
@@ -519,6 +545,7 @@ document.addEventListener('keydown', (e) => {
     } else if (attempt !== 0 && preventError) {
         currentTeam === 1 ? playSound(voices["blue"]) : playSound(voices["red"]);
         setTimeout(() => {
+          if (!gameActive) return;
           playSound(voices[cards.dataset.role]);
           revealCard(cards);
         }, 3300)
@@ -564,6 +591,83 @@ setInterval(() => {
     startCountdown('GAME OVER!', gameTimes[currentTeam]);
   }
 }, 1000);
+
+function showEndGameSummary(stats) {
+  const summary = document.getElementById('endGameSummary');
+  const content = document.getElementById('summaryContent');
+  const style1 = agents[1] === 7 ? 'style="font-weight: bold; color: darkgreen;"' : '';
+  const style2 = agents[2] === 7 ? 'style="font-weight: bold; color: darkgreen;"' : '';
+  const style3 = (agents[1] === 7 && statDoubleAgent[1] === 1) || (agents[2] === 7 && statDoubleAgent[2] === 1) ? 'style="font-weight: bold; color: darkgreen;"' : '';
+  
+  content.innerHTML = `
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">CARD PICKED</th>
+        <th colspan="3">TEAM</th>
+        <th rowspan="2">TOTAL</th>
+      </tr>
+      <tr>
+        <th>BLUE TEAM</th>
+        <th>RED TEAM</th>
+        <th>AUTO REVEAL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Blue Agents</td><td>${stats.team1.blueAgents}</td><td>${stats.team2.blueAgents}</td><td>${stats.autoReveal.blueAgents}</td><td ${style1}>${stats.total.blueAgents}</td></tr>
+      <tr><td>Red Agents</td><td>${stats.team1.redAgents}</td><td>${stats.team2.redAgents}</td><td>${stats.autoReveal.redAgents}</td><td ${style2}>${stats.total.redAgents}</td></tr>
+      <tr><td>Double Agents</td><td>${stats.team1.doubleAgents}</td><td>${stats.team2.doubleAgents}</td><td>${stats.autoReveal.doubleAgents}</td><td ${style3}>${stats.total.doubleAgents}</td></tr>
+      <tr><td>Innocent Bystanders</td><td>${stats.team1.innocentBystanders}</td><td>${stats.team2.innocentBystanders}</td><td>${stats.autoReveal.innocentBystanders}</td><td>${stats.total.innocentBystanders}</td></tr>
+      <tr><td>Assassin</td><td>${stats.team1.assassin}</td><td>${stats.team2.assassin}</td><td>${stats.autoReveal.assassin}</td><td>${stats.total.assassin}</td></tr>
+      <tr><td>Time Used</td><td ${statAssassin[1] === 1 ? 'style="font-weight: bold;"' : ''}>${stats.team1.time}</td><td ${statAssassin[2] === 1 ? 'style="font-weight: bold;"' : ''}>${stats.team2.time}</td></tr>
+    </tbody>
+  </table>
+  <br>
+  <table>
+    <tbody>
+      <tr style="font-weight: bold;"><td>WINNER</td><td style="color: ${statWinner ? '#253cae;' : '#ae2525;'}">${stats.winner}</td></tr>
+    </tbody>
+  </table>
+`;
+
+  summary.style.display = 'flex';
+}
+
+function generateStats() {
+  return {
+    team1: {
+      blueAgents: statBlueAgents[1],
+      redAgents: statRedAgents[1],
+      doubleAgents: statDoubleAgent[1],
+      innocentBystanders: statInnocentBystanders[1],
+      assassin: statAssassin[1],
+      time: `0${Math.floor(statTimeUsed[1] / 60)}:${(statTimeUsed[1] % 60).toString().padStart(2, '0')}`,
+    },
+    team2: {
+      blueAgents: statBlueAgents[2],
+      redAgents: statRedAgents[2],
+      doubleAgents: statDoubleAgent[2],
+      innocentBystanders: statInnocentBystanders[2],
+      assassin: statAssassin[2],
+      time: `0${Math.floor(statTimeUsed[2] / 60)}:${(statTimeUsed[2] % 60).toString().padStart(2, '0')}`,
+    },
+    autoReveal: {
+      blueAgents: statAutoReveal[1],
+      redAgents: statAutoReveal[2],
+      doubleAgents: '-',
+      innocentBystanders: '-',
+      assassin: '-',
+    },
+    total: {
+      blueAgents: statBlueAgents[1] + statBlueAgents[2] + statAutoReveal[1],
+      redAgents: statRedAgents[1] + statRedAgents[2] + statAutoReveal[2],
+      doubleAgents: statDoubleAgent[1] + statDoubleAgent[2],
+      innocentBystanders: statInnocentBystanders[1] + statInnocentBystanders[2],
+      assassin: statAssassin[1] + statAssassin[2],
+    },
+    winner: statWinner ? "BLUE TEAM" : "RED TEAM"
+  };
+}
 
 updateTimers(gameTimes[1]);
 buildGameBoard();
