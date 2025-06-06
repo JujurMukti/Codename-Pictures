@@ -296,6 +296,7 @@ function revealCard(card) {
   if (role === "blueAgents") {
     agents[1]++;
     agent1.textContent = `AGENT REVEALED: ${agents[1]}`;
+    statBlueAgents[currentTeam]++;
     if (agents[1] === 7) {
       showPopup(1);
       return;
@@ -317,10 +318,10 @@ function revealCard(card) {
       penaltyPoint2.innerText = `PP: ${pp[2]}`;
       blueTeamTurn();
     }
-    statBlueAgents[currentTeam]++;
   } else if (role === "redAgents") {
     agents[2]++;
     agent2.textContent = `AGENT REVEALED: ${agents[2]}`;
+    statRedAgents[currentTeam]++;
     if (agents[2] === 7) {
       showPopup(1);
       return;
@@ -342,11 +343,11 @@ function revealCard(card) {
       penaltyPoint1.innerText = `PP: ${pp[1]}`;
       redTeamTurn();
     }
-    statRedAgents[currentTeam]++;
   } else if (role === "doubleAgents") {
     currentTeam === 1 ? agents[1]++ : agents[2]++;
     if (currentTeam === 1) agent1.textContent = `AGENT REVEALED: ${agents[1]}`;
     else agent2.textContent = `AGENT REVEALED: ${agents[2]}`;
+    statDoubleAgent[currentTeam]++;
     if (agents[1] === 7 || agents[2] === 7) {
       showPopup(1);
       return;
@@ -362,7 +363,6 @@ function revealCard(card) {
       if (currentTeam === 1) redTeamTurn();
       else blueTeamTurn();
     }
-    statDoubleAgent[currentTeam]++;
   } else if (role === "innocentBystanders") {
     if (currentTeam === 1) {
       pp[1] += attempt + 1;
@@ -376,6 +376,7 @@ function revealCard(card) {
     }
     statInnocentBystanders[currentTeam]++;
   } else {
+      statAssassin[currentTeam]++;
       if (currentTeam === 1) {
       pp[1] += attempt;
       penaltyPoint1.innerText = `PP: ${pp[1]}`;
@@ -389,7 +390,6 @@ function revealCard(card) {
       updateTimers(gameTimes[2]);
       if (gameTimes[2] - 2 > 0) blueTeamTurn();
     }
-    statAssassin[currentTeam]++;
   }
 
   if (pp[1] >= 5) {
