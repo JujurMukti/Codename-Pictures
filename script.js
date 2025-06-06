@@ -144,7 +144,7 @@ function startCountdown(text, counts = 3) {
 function playSound(sound) {
   sound.pause();
   sound.currentTime = 0;
-  sound.volume = 0.5;
+  sound.volume = 1;
   sound.play();
 }
 
